@@ -71,17 +71,55 @@ module.exports = {
       }
       return true;
     },
-    createTask: (root, { task }) => {
-      console.log("createTask", task);
-      return null;
+    createTask: async (root, { input, listID }) => {
+      let task;
+      let db;
+      input._id = ObjectID();
+      try {
+        db = await connectDB();
+        const task = await db
+          .collection("lists")
+          .updateOne({ _id: ObjectID(listID) }, { $push: { tasks: input } });
+        input._id = task.insertedId;
+      } catch (error) {
+        console.log(error);
+      }
+      return input;
     },
-    updateTask: (root, { task }) => {
-      console.log("updateTask", task);
-      return null;
+    updateTask: async (root, { input, taskID }) => {
+      let task;
+      let db;
+      // const { _id, ...inputData } = input;
+      input._id = ObjectID(taskID);
+      try {
+        db = await connectDB();
+        const task = await db
+          .collection("lists")
+          .updateOne(
+            { "tasks._id": ObjectID(taskID) },
+            { $set: { "tasks.$": input } }
+          );
+        input._id = task.insertedId;
+      } catch (error) {
+        console.log(error);
+      }
+      return input;
     },
-    deleteTask: (root, { task }) => {
-      console.log("deleteTask", task);
-      return null;
+    deleteTask: async (root, { taskID }) => {
+      let task;
+      let db;
+      try {
+        db = await connectDB();
+        const task = await db
+          .collection("lists")
+          .updateOne(
+            { "tasks._id": ObjectID(taskID) },
+            { $pull: { tasks: { _id: ObjectID(taskID) } } }
+          );
+      } catch (error) {
+        console.log(error);
+      }
+      return true;
     }
   }
 };

@@ -24,9 +24,9 @@ type List {
 
 type Mutation {
   createList(input: ListInput!): List
-  createTask(task: TaskInput!): Task
+  createTask(listID: ID!, input: TaskInput!): Task
   updateList(listID: ID!, input: ListInput!): List
-  updateTask(taskID: ID!, task: TaskInput!): Task
+  updateTask(taskID: ID!, input: TaskInput!): Task
   deleteList(input: ID!): Boolean
   deleteTask(taskID: ID!): Boolean
 }
