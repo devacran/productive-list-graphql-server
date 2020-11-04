@@ -1,18 +1,6 @@
 const connectDB = require("./db");
 const { ObjectID } = require("mongodb");
-const prueba = [
-  {
-    id: 123123,
-    name: "Mi Tarea 1",
-    duration: 23,
-    description: "String",
-    completed: false,
-    completitionTime: 34,
-    startDate: "String",
-    endDate: "String",
-    creationDate: "String"
-  }
-];
+
 module.exports = {
   Query: {
     getList: async (root, { listID }) => {
@@ -41,6 +29,59 @@ module.exports = {
         console.log(err);
       }
       return task;
+    }
+  },
+  Mutation: {
+    createList: async (root, { input }) => {
+      let list;
+      let db;
+      try {
+        db = await connectDB();
+        const list = await db.collection("lists").insertOne(input);
+        input._id = list.insertedId;
+      } catch (error) {
+        console.log(error);
+      }
+      return input;
+    },
+    updateList: async (root, { input, listID }) => {
+      let db;
+      let list;
+      const { _id, ...inputData } = input;
+      try {
+        db = await connectDB();
+        list = await db
+          .collection("lists")
+          .updateOne({ _id: ObjectID(listID) }, { $set: inputData });
+        input._id = list.upsertedId;
+      } catch (error) {
+        console.log(error);
+      }
+      return input;
+    },
+    deleteList: async (root, { input }) => {
+      let db;
+      try {
+        db = await connectDB();
+        const list = await db
+          .collection("lists")
+          .deleteOne({ _id: ObjectID(input) });
+      } catch (error) {
+        console.log(error);
+      }
+      return true;
+    },
+    createTask: (root, { task }) => {
+      console.log("createTask", task);
+      return null;
+    },
+    updateTask: (root, { task }) => {
+      console.log("updateTask", task);
+      return null;
+    },
+    deleteTask: (root, { task }) => {
+      console.log("deleteTask", task);
+      return null;
     }
   }
 };

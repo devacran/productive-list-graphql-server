@@ -2,10 +2,6 @@ type Query {
   getList(listID: ID!): List
   getTask(taskID: ID!): Task
 }
-type Mutation {
-  updateList(listID: ID!): List
-  updateTask(taskID: ID!): Task
-}
 type Task {
   _id: ID!
   name: String!
@@ -19,7 +15,28 @@ type Task {
 }
 type List {
   _id: ID!
-  user_id: ID
+  user_id: ID!
   name: String!
   tasks: [Task]
+}
+
+# --------------------------------------------------------------------------------
+
+type Mutation {
+  createList(input: ListInput!): List
+  createTask(task: TaskInput!): Task
+  updateList(listID: ID!, input: ListInput!): List
+  updateTask(taskID: ID!, task: TaskInput!): Task
+  deleteList(input: ID!): Boolean
+  deleteTask(taskID: ID!): Boolean
+}
+input ListInput {
+  name: String!
+  user_id: ID!
+}
+input TaskInput {
+  name: String!
+  duration: Int!
+  description: String
+  creationDate: String!
 }
