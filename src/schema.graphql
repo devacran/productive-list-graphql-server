@@ -1,0 +1,25 @@
+type Query {
+  getList(listID: ID!): List
+  getTask(taskID: ID!): Task
+}
+type Mutation {
+  updateList(listID: ID!): List
+  updateTask(taskID: ID!): Task
+}
+type Task {
+  _id: ID!
+  name: String!
+  duration: Int!
+  description: String
+  completed: Boolean
+  completitionTime: Int
+  startDate: String
+  endDate: String
+  creationDate: String!
+}
+type List {
+  _id: ID!
+  user_id: ID
+  name: String!
+  tasks: [Task]
+}
