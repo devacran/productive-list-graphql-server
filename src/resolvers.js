@@ -75,12 +75,13 @@ module.exports = {
       let task;
       let db;
       input._id = ObjectID();
+      input.completed = false;
+      input.creationDate = new Date().toString();
       try {
         db = await connectDB();
         const task = await db
           .collection("lists")
           .updateOne({ _id: ObjectID(listID) }, { $push: { tasks: input } });
-        input._id = task.insertedId;
       } catch (error) {
         console.log(error);
       }
@@ -89,17 +90,19 @@ module.exports = {
     updateTask: async (root, { input, taskID }) => {
       let task;
       let db;
-      // const { _id, ...inputData } = input;
-      input._id = ObjectID(taskID);
+      const fieldsToUpdate = {};
+      Object.keys(input).forEach(
+        //To create "task.$.fieldName": fieldValue for each input value
+        k => (fieldsToUpdate[`tasks.$.${k}`] = input[k])
+      );
       try {
         db = await connectDB();
-        const task = await db
-          .collection("lists")
-          .updateOne(
-            { "tasks._id": ObjectID(taskID) },
-            { $set: { "tasks.$": input } }
-          );
-        input._id = task.insertedId;
+        const task = await db.collection("lists").updateOne(
+          { "tasks._id": ObjectID(taskID) },
+          {
+            $set: fieldsToUpdate
+          }
+        );
       } catch (error) {
         console.log(error);
       }
