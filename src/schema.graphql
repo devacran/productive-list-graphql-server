@@ -8,7 +8,7 @@ type Task {
   duration: Int!
   description: String
   completed: Boolean
-  completitionTime: Int
+  completitionTime: Float
   startDate: String
   endDate: String
   creationDate: String!
@@ -25,8 +25,8 @@ type List {
 type Mutation {
   createList(input: ListInput!): List
   createTask(listID: ID!, input: TaskCreate!): Task
-  updateList(listID: ID!, input: ListInput!): List
-  updateTask(taskID: ID!, input: TaskUpdate!): Task
+  updateList(listID: ID!, input: ListInput!): String
+  updateTask(taskID: ID!, input: TaskUpdate!): String
   deleteList(input: ID!): Boolean
   deleteTask(taskID: ID!): Boolean
 }
@@ -44,7 +44,8 @@ input TaskUpdate {
   duration: Int
   description: String
   completed: Boolean
-  completitionTime: Int
+  creationDate: String
+  completitionTime: Float
   startDate: String
   endDate: String
 }

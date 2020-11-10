@@ -57,7 +57,7 @@ module.exports = {
       } catch (error) {
         console.log(error);
       }
-      return input;
+      return "list updated";
     },
     deleteList: async (root, { input }) => {
       let db;
@@ -106,7 +106,7 @@ module.exports = {
       } catch (error) {
         console.log(error);
       }
-      return input;
+      return "Task Updated";
     },
     deleteTask: async (root, { taskID }) => {
       let task;
