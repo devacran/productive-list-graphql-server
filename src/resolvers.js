@@ -9,7 +9,7 @@ module.exports = {
       try {
         db = await connectDB();
         list = await db.collection("lists").findOne({
-          _id: ObjectID(listID)
+          _id: ObjectID(listID),
         });
       } catch (err) {
         console.log(err);
@@ -29,7 +29,7 @@ module.exports = {
         console.log(err);
       }
       return task;
-    }
+    },
   },
   Mutation: {
     createList: async (root, { input }) => {
@@ -93,14 +93,14 @@ module.exports = {
       const fieldsToUpdate = {};
       Object.keys(input).forEach(
         //To create "task.$.fieldName": fieldValue for each input value
-        k => (fieldsToUpdate[`tasks.$.${k}`] = input[k])
+        (k) => (fieldsToUpdate[`tasks.$.${k}`] = input[k])
       );
       try {
         db = await connectDB();
         const task = await db.collection("lists").updateOne(
           { "tasks._id": ObjectID(taskID) },
           {
-            $set: fieldsToUpdate
+            $set: fieldsToUpdate,
           }
         );
       } catch (error) {
@@ -123,6 +123,6 @@ module.exports = {
         console.log(error);
       }
       return true;
-    }
-  }
+    },
+  },
 };

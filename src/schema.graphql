@@ -2,7 +2,7 @@ type Query {
   getList(listID: ID!): List
   getTask(taskID: ID!): Task
 }
-type Task {
+type Task implements ITask {
   _id: ID!
   name: String!
   duration: Int!
@@ -13,11 +13,41 @@ type Task {
   endDate: String
   creationDate: String!
 }
+
+type EventTask implements ITask {
+  _id: ID!
+  name: String!
+  description: String
+  completed: Boolean
+  startDate: String
+  endDate: String
+  creationDate: String!
+  place: String
+  video_call_url: String
+}
+
+type ShoppingTask implements ITask {
+  _id: ID!
+  completed: Boolean
+  creationDate: String!
+  description: String
+  name: String!
+  items: [String]
+}
+
 type List {
   _id: ID!
   user_id: ID!
   name: String!
   tasks: [Task]
+}
+
+interface ITask {
+  _id: ID!
+  name: String!
+  description: String
+  completed: Boolean
+  creationDate: String!
 }
 
 # --------------------------------------------------------------------------------
